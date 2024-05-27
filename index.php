@@ -274,33 +274,81 @@ $pests = $pests->all();
         console.log()
 
         lastYear = {
-            Jan: lastJan ? lastJan.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Feb: lastFeb ? lastFeb.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Mar: lastMar ? lastMar.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Apr: lastApr ? lastApr.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            May: lastMay ? lastMay.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Jun: lastJun ? lastJun.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Jul: lastJul ? lastJul.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Aug: lastAug ? lastAug.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Sep: lastSep ? lastSep.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Oct: lastOct ? lastOct.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Nov: lastNov ? lastNov.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Dec: lastDec ? lastDec.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
+            Jan: lastJan ? lastJan.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Feb: lastFeb ? lastFeb.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Mar: lastMar ? lastMar.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Apr: lastApr ? lastApr.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            May: lastMay ? lastMay.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Jun: lastJun ? lastJun.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Jul: lastJul ? lastJul.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Aug: lastAug ? lastAug.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Sep: lastSep ? lastSep.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Oct: lastOct ? lastOct.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Nov: lastNov ? lastNov.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Dec: lastDec ? lastDec.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
         }
 
         thisYear = {
-            Jan: thisJan ? thisJan.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Feb: thisFeb ? thisFeb.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Mar: thisMar ? thisMar.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Apr: thisApr ? thisApr.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            May: thisMay ? thisMay.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Jun: thisJun ? thisJun.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Jul: thisJul ? thisJul.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Aug: thisAug ? thisAug.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Sep: thisSep ? thisSep.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Oct: thisOct ? thisOct.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Nov: thisNov ? thisNov.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
-            Dec: thisDec ? thisDec.reduce(function(sum, obj){return obj.estimated_produce + sum}, 0) : [],
+            Jan: thisJan ? thisJan.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Feb: thisFeb ? thisFeb.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Mar: thisMar ? thisMar.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Apr: thisApr ? thisApr.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            May: thisMay ? thisMay.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Jun: thisJun ? thisJun.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Jul: thisJul ? thisJul.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Aug: thisAug ? thisAug.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Sep: thisSep ? thisSep.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Oct: thisOct ? thisOct.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Nov: thisNov ? thisNov.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Dec: thisDec ? thisDec.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
         }
 
         var ctx = document.getElementById('harvestChart').getContext('2d');
@@ -366,12 +414,14 @@ $pests = $pests->all();
                 }]
             },
             options: {
-                title: {
-                    display: true,
-                    text: 'Rice and Corn Crop Harvest Comparison (Total)'
-                },
-                legend: {
-                    display: false,
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: 'Rice and Corn Crop Harvest Comparison (Total)'
+                    },
                 }
             }
         });
