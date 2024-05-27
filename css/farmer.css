@@ -45,3 +45,13 @@ option {
     padding: 10px 0;
     color: red;
 }
+
+.btn-main{
+    padding: 10px;
+    background-color:var(--green1);
+    color: #fff;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include 'layout/header.php';
+include_once('layout/header.php');
 
 include 'models/Models.php';
 
@@ -15,13 +15,13 @@ if(!isset($_SESSION['user_login'])){
     exit();
 }
 
-$admin = new Admin('admins');
+$admin = new Admin();
 $farmers = new Farmers('farmers');
 $harvests = new Harvest('harvest');
 
 $user = $_SESSION['user_login'];
 
-$admin = $admin->where(['username' => $user])[0];
+$admin = $admin->where(['username' => $user])->get()[0];
 $farmers = $farmers->all();
 
 ?>
@@ -146,7 +146,7 @@ $farmers = $farmers->all();
             return $carry;
         }, []);
 
-        $crops = pluck($harvests->harvests(), 'name');
+        $crops = pluck($harvests->harvests(), 'crop_name');
         $corn = array_filter($crops, function ($crop) {
             return $crop == 'Corn';
         });
@@ -267,4 +267,5 @@ $farmers = $farmers->all();
 
     <?php
 
-    include 'layout/footer.php';
+    include_once 'layout/footer.php';
+    ?>

@@ -1,7 +1,14 @@
 <?php
-    $host = "localhost";
-    $username = "root";
-    $password = "harvestassistant";
+    // Uncomment Here
+    // $host = "localhost";
+    // $username = "root";
+    // $password = "harvestassistant";
+    // $dbname = "agri_db";
+
+    // Comment Here
+    $host = "mysql";
+    $username = "danny";
+    $password = "dan123";
     $dbname = "agri_db";
 
     try{
