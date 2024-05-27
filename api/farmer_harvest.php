@@ -1,4 +1,5 @@
 <?php
+
 // functions
 require_once('../config/conn.php');
 require_once('../functions.php');
@@ -38,45 +39,40 @@ $farmer = new Farmers();
 $info = $farmer->farmer($username);
 
 $farmer_id = $info['id'];
+$crop_id = $info['crop_id'];
 
-if (!isset($_POST['pestName'])) {
+if (!isset($_POST['plantedID'])) {
     return json([
-        "message" => "Please add pest name!",
+        "message" => "Please add the planted ID of the crops!",
         "status" => "invalid"
     ]);
 }
 
-$pestName = $_POST['pestName'];
+$plantedID = $_POST['plantedID'];
+$checkHarvest = $conn->prepare('SELECT isHarvested FROM farmer_planted WHERE id = ?');
+$checkHarvest->execute([$plantedID]);
+$isHarvested = $checkHarvest->fetch(PDO::FETCH_ASSOC);
 
-if (!isset($_FILES['uploadPests'])) {
+if($isHarvested['isHarvested']){
     return json([
-        "message" => "Please upload image!",
+        "message" => "Already harvested this crop.",
         "status" => "invalid"
-    ]);
+    ], 400);
 }
 
-$base_dir = "../pest_images/{$info['rsbsa_num']}/";
-
-if (!is_dir($base_dir)) {
-    mkdir($base_dir, 0755, true);
-}
-
-$original_filename = $_FILES["uploadPests"]["name"];
-$file_extension = pathinfo($original_filename, PATHINFO_EXTENSION);
-$new_filename = md5(random_bytes(20)) . '.' . $file_extension;
-
-$target_file = $base_dir . $new_filename;
-
-$file_path = explode('../', $target_file)[1];
-
-move_uploaded_file($_FILES["uploadPests"]["tmp_name"], $target_file);
+$estimated_produce = $info['area'] * 5000;
+$estimated_income = ($estimated_produce / 50) * 1800;
 
 $date = new DateTime();
 $date = $date->format("Y-m-d H:i:s");
-$stmt = $conn->prepare('INSERT INTO pests_reports(farmer_id, img_path, pest_name, date_reported) VALUES(?,?,?,?)');
-$stmt->execute([$info['id'], $file_path, $pestName, $date]);
+
+$updateHarvest = $conn->prepare('UPDATE farmer_planted SET isHarvested = ? WHERE id = ?');
+$updateHarvest->execute([1, $plantedID]);
+
+$stmt = $conn->prepare('INSERT INTO harvests(farmer_id, crop_id, date_harvested, estimated_produce, estimated_income) VALUES(?,?,?,?,?)');
+$stmt->execute([$farmer_id, $crop_id, $date, $estimated_produce, $estimated_income]);
 
 return json([
-    "message" => "Successfully uploaded image",
+    "message" => "Harvested successfully",
     "status" => "success"
 ], 200);
