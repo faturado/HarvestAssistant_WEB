@@ -4,12 +4,6 @@
 
         <div class="user">
 
-            <div class="topicon">
-                <span><ion-icon name="chatbubbles-outline"></ion-icon></span>
-                <span><ion-icon name="notifications-outline"></ion-icon></span>
-            </div>
-
-            <img src="assets/images/pfp.jpg" alt="">
             <div class="userdes">
                 <p>
                     <?= $admin['first_name'] ?>

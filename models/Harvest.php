@@ -2,6 +2,11 @@
 
 class Harvest extends Models
 {
+
+    public function __construct($table = 'harvests') {
+        parent::__construct($table);
+    }
+
     public function harvests()
     {
         $stmt = $this->pdo->prepare("SELECT * FROM `harvests` 
