@@ -1,28 +1,31 @@
 <?php
 session_start();
 
-include 'layout/header.php';
+include_once('layout/header.php');
 
 include 'models/Models.php';
 
 include 'models/Admin.php';
 include 'models/Farmers.php';
 include 'models/Harvest.php';
+include 'models/PestReports.php';
 include 'functions.php';
 
-if(!isset($_SESSION['user_login'])){
+if (!isset($_SESSION['user_login'])) {
     header('Location: login.php');
     exit();
 }
 
-$admin = new Admin('admins');
-$farmers = new Farmers('farmers');
-$harvests = new Harvest('harvest');
+$admin = new Admin();
+$farmers = new Farmers();
+$harvests = new Harvest();
+$pests = new PestReports();
 
 $user = $_SESSION['user_login'];
 
-$admin = $admin->where(['username' => $user])[0];
+$admin = $admin->where(['username' => $user])->get()[0];
 $farmers = $farmers->all();
+$pests = $pests->all();
 
 ?>
 
@@ -63,7 +66,7 @@ $farmers = $farmers->all();
             <div class="card">
                 <a href="report.php">
                     <div>
-                        <div class="number">7</div>
+                        <div class="number"><?= count($pests) ?></div>
                         <div class="cardname">Pest Detected</div>
                     </div>
                 </a>
@@ -73,15 +76,6 @@ $farmers = $farmers->all();
                 </div>
             </div>
 
-            <div class="card">
-                <div>
-                    <div class="number">3</div>
-                    <div class="cardname">Schedules</div>
-                </div>
-                <div class="card-icon">
-                    <i class="las la-calendar"></i>
-                </div>
-            </div>
         </div>
 
         <!-- ======================= Charts ================== -->
@@ -117,36 +111,24 @@ $farmers = $farmers->all();
     <script>
         <?php
 
-        $date = pluck($harvests->harvests(), 'date_harvested');
+        $date = $harvests->all();
+
 
         $lastYear = array_filter($date, function ($data) {
             $getLastYear = new DateTime();
-            $getYear = new DateTime($data);
+            $getYear = new DateTime($data['date_harvested']);
             $getLastYear = $getLastYear->modify('-1 year');
             return $getYear->format('Y') == $getLastYear->format('Y');
         });
 
         $thisYear = array_filter($date, function ($data) {
             $getThisYear = new DateTime();
-            $getYear = new DateTime($data);
+            $getYear = new DateTime($data['date_harvested']);
             return $getYear->format('Y') == $getThisYear->format('Y');
         });
 
-        $lastYear = array_reduce($lastYear, function ($carry, $date) {
-            $getMonth = new DateTime($date);
-            $monthAbbreviation = $getMonth->format('M');
-            $carry[$monthAbbreviation][] = $date;
-            return $carry;
-        }, []);
 
-        $thisYear = array_reduce($thisYear, function ($carry, $date) {
-            $getMonth = new DateTime($date);
-            $monthAbbreviation = $getMonth->format('M');
-            $carry[$monthAbbreviation][] = $date;
-            return $carry;
-        }, []);
-
-        $crops = pluck($harvests->harvests(), 'name');
+        $crops = pluck($harvests->harvests(), 'crop_name');
         $corn = array_filter($crops, function ($crop) {
             return $crop == 'Corn';
         });
@@ -157,37 +139,216 @@ $farmers = $farmers->all();
 
         ?>
 
-        lastYear = [<?php echo json_encode($lastYear); ?>]
-        thisYear = [<?php echo json_encode($thisYear); ?>]
+        var lastYear = [<?php echo json_encode($lastYear); ?>]
+        lastYear = Object.values(...lastYear)
+        var thisYear = [<?php echo json_encode($thisYear); ?>]
+        thisYear = Object.values(...thisYear)
+
+        var monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        let lastJan = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 0
+        })
+        let lastFeb = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 1
+        })
+        let lastMar = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 2
+        })
+        let lastApr = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 4
+        })
+        let lastMay = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 5
+        })
+        let lastJun = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 6
+        })
+        let lastJul = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 7
+        })
+        let lastAug = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 8
+        })
+        let lastSep = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 9
+        })
+        let lastOct = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 9
+        })
+        let lastNov = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 10
+        })
+        let lastDec = lastYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 11
+        })
+
+        let thisJan = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 0
+        })
+        let thisFeb = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 1
+        })
+        let thisMar = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 2
+        })
+        let thisApr = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 4
+        })
+        let thisMay = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 5
+        })
+        let thisJun = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 6
+        })
+        let thisJul = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 7
+        })
+        let thisAug = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 8
+        })
+        let thisSep = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 9
+        })
+        let thisOct = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 9
+        })
+        let thisNov = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 10
+        })
+        let thisDec = thisYear.filter(data => {
+            date = new Date(data.date_harvested)
+            date = date.getMonth()
+            return date == 11
+        })
+
+        console.log()
 
         lastYear = {
-            Jan: lastYear[0].Jan ? lastYear[0].Jan : [],
-            Feb: lastYear[0].Feb ? lastYear[0].Feb : [],
-            Mar: lastYear[0].Mar ? lastYear[0].Mar : [],
-            Apr: lastYear[0].Apr ? lastYear[0].Apr : [],
-            May: lastYear[0].May ? lastYear[0].May : [],
-            Jun: lastYear[0].Jun ? lastYear[0].Jun : [],
-            Jul: lastYear[0].Jul ? lastYear[0].Jul : [],
-            Aug: lastYear[0].Aug ? lastYear[0].Aug : [],
-            Sep: lastYear[0].Sep ? lastYear[0].Sep : [],
-            Oct: lastYear[0].Oct ? lastYear[0].Oct : [],
-            Nov: lastYear[0].Nov ? lastYear[0].Nov : [],
-            Dec: lastYear[0].Dec ? lastYear[0].Dec : [],
+            Jan: lastJan ? lastJan.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Feb: lastFeb ? lastFeb.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Mar: lastMar ? lastMar.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Apr: lastApr ? lastApr.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            May: lastMay ? lastMay.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Jun: lastJun ? lastJun.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Jul: lastJul ? lastJul.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Aug: lastAug ? lastAug.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Sep: lastSep ? lastSep.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Oct: lastOct ? lastOct.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Nov: lastNov ? lastNov.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Dec: lastDec ? lastDec.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
         }
 
         thisYear = {
-            Jan: thisYear[0].Jan ? thisYear[0].Jan : [],
-            Feb: thisYear[0].Feb ? thisYear[0].Feb : [],
-            Mar: thisYear[0].Mar ? thisYear[0].Mar : [],
-            Apr: thisYear[0].Apr ? thisYear[0].Apr : [],
-            May: thisYear[0].May ? thisYear[0].May : [],
-            Jun: thisYear[0].Jun ? thisYear[0].Jun : [],
-            Jul: thisYear[0].Jul ? thisYear[0].Jul : [],
-            Aug: thisYear[0].Aug ? thisYear[0].Aug : [],
-            Sep: thisYear[0].Sep ? thisYear[0].Sep : [],
-            Oct: thisYear[0].Oct ? thisYear[0].Oct : [],
-            Nov: thisYear[0].Nov ? thisYear[0].Nov : [],
-            Dec: thisYear[0].Dec ? thisYear[0].Dec : [],
+            Jan: thisJan ? thisJan.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Feb: thisFeb ? thisFeb.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Mar: thisMar ? thisMar.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Apr: thisApr ? thisApr.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            May: thisMay ? thisMay.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Jun: thisJun ? thisJun.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Jul: thisJul ? thisJul.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Aug: thisAug ? thisAug.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Sep: thisSep ? thisSep.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Oct: thisOct ? thisOct.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Nov: thisNov ? thisNov.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
+            Dec: thisDec ? thisDec.reduce(function(sum, obj) {
+                return obj.estimated_produce + sum
+            }, 0) : [],
         }
 
         var ctx = document.getElementById('harvestChart').getContext('2d');
@@ -196,39 +357,39 @@ $farmers = $farmers->all();
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                 datasets: [{
-                    label: 'Harvests Last Year',
+                    label: 'Estimated Last Year',
                     data: [
-                        lastYear.Jan.length,
-                        lastYear.Feb.length,
-                        lastYear.Mar.length,
-                        lastYear.Apr.length,
-                        lastYear.May.length,
-                        lastYear.Jun.length,
-                        lastYear.Jul.length,
-                        lastYear.Aug.length,
-                        lastYear.Sep.length,
-                        lastYear.Oct.length,
-                        lastYear.Nov.length,
-                        lastYear.Dec.length,
+                        lastYear.Jan,
+                        lastYear.Feb,
+                        lastYear.Mar,
+                        lastYear.Apr,
+                        lastYear.May,
+                        lastYear.Jun,
+                        lastYear.Jul,
+                        lastYear.Aug,
+                        lastYear.Sep,
+                        lastYear.Oct,
+                        lastYear.Nov,
+                        lastYear.Dec,
                     ],
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
                 }, {
-                    label: 'Harvests This Year',
+                    label: 'Estimated Produce This Year',
                     data: [
-                        thisYear.Jan.length,
-                        thisYear.Feb.length,
-                        thisYear.Mar.length,
-                        thisYear.Apr.length,
-                        thisYear.May.length,
-                        thisYear.Jun.length,
-                        thisYear.Jul.length,
-                        thisYear.Aug.length,
-                        thisYear.Sep.length,
-                        thisYear.Oct.length,
-                        thisYear.Nov.length,
-                        thisYear.Dec.length,
+                        thisYear.Jan,
+                        thisYear.Feb,
+                        thisYear.Mar,
+                        thisYear.Apr,
+                        thisYear.May,
+                        thisYear.Jun,
+                        thisYear.Jul,
+                        thisYear.Aug,
+                        thisYear.Sep,
+                        thisYear.Oct,
+                        thisYear.Nov,
+                        thisYear.Dec,
                     ],
                     fill: false,
                     borderColor: 'rgb(255, 0, 0)',
@@ -253,13 +414,14 @@ $farmers = $farmers->all();
                 }]
             },
             options: {
-                title: {
-                    display: true,
-                    text: 'Rice and Corn Crop Harvest Comparison (Total)'
-                },
-                legend: {
-                    display: true,
-                    position: 'bottom'
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: 'Rice and Corn Crop Harvest Comparison (Total)'
+                    },
                 }
             }
         });
@@ -267,4 +429,5 @@ $farmers = $farmers->all();
 
     <?php
 
-    include 'layout/footer.php';
+    include_once 'layout/footer.php';
+    ?>

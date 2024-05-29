@@ -36,16 +36,8 @@ if(isset($_SESSION['user_login'])){
                 <i class='bx bx-lock-alt'></i>
             </div>
 
-            <div class="rec-rem">
-                <label><input type="checkbox" name="" id="">Remember me</label>
-                <a href="">Forgot password?</a>
-            </div>
 
             <button type="submit" class="btnlogin" >Login</button>
-
-            <div class="register">
-                <p>Don't have an account? <a href="signup.php">Sign Up</a></p>
-            </div>
 
         </form>
     </div>

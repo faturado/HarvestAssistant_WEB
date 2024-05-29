@@ -32,7 +32,7 @@
         exit();
     }
 
-    $sql = 'INSERT INTO admins(username, password, first_name, middle_name, last_name, email, role)
+    $sql = 'INSERT INTO admins(username, password, first_name, middle_name, last_name, email, role_id)
             VALUES(?,?,?,?,?,?,?)';
     $stmt = $conn->prepare($sql);
     $stmt->execute([$username, $password, $fname, $mname, $lname, $email, '2']);

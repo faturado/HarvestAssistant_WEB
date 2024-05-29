@@ -40,14 +40,6 @@
                 </li>
 
                 <li>
-                    <a href="messages.php">
-                        <span class="icon"><ion-icon name="chatbubble-outline"></ion-icon></span>
-                        <span class="title">Messages</span>
-                    </a>
-                    <span class="htitle">Messages</span>
-                </li>
-
-                <li>
                     <a href="scripts/logout.php">
                         <span class="icon"><ion-icon name="log-out-outline"></ion-icon></span>
                         <span class="title">Sign Out</span>

@@ -22,8 +22,12 @@ $barangays = new Barangay('barangay');
 
 $user = $_SESSION['user_login'];
 
-$admin = $admin->where(['username' => $user])[0];
-$farmers = $farmers->farmers();
+$admin = $admin->where(['username' => $user])->get()[0];
+$page = $_GET['page'] ?? 1;
+$paginate = floor(count($farmers->all()) / 10) + 1;
+$farmers = $farmers->farmers((int)$page);
+// var_dump($farmers);
+// die();
 $crops = $crops->all();
 $barangays = $barangays->all();
 
@@ -45,7 +49,7 @@ $barangays = $barangays->all();
                 <div style="margin-bottom: 2em">
                     <h2 style="text-align:center">Farmers' Information</h2>
 
-                    
+
                     <?php
                     if (isset($_SESSION['success_message'])) {
                         echo '<div class="alert-success">' . $_SESSION['success_message'] . '</div>';
@@ -53,13 +57,15 @@ $barangays = $barangays->all();
                     }
 
                     if (isset($_SESSION['error_message'])) {
-                        echo '<div class="alert-error">'. $_SESSION['error_message'] . '</div>';
+                        echo '<div class="alert-error">' . $_SESSION['error_message'] . '</div>';
                         unset($_SESSION['error_message']);
                     }
 
                     ?>
-                    <i class="las la-user-plus addicon" onclick="popup(popupfarmer)"></i>
-                    <i class="las la-file-excel addicon" onclick="popup(popupcsv)"></i>
+                    <button class="btn-main" onclick="popup(popupfarmer)"><i class="las la-user-plus addicon"></i> <span>Add Farmer</span></button>
+                    <button class="btn-main" onclick="popup(popupcsv)"><i class="las la-file-excel addicon"></i> <span>Batch Upload Farmer</span></button>
+
+
                 </div>
                 <!-- Upload File -->
                 <div id="popupcsv" class="popup">
@@ -104,7 +110,7 @@ $barangays = $barangays->all();
                                 <?php
                                 foreach ($crops as $crop) {
                                 ?>
-                                    <option value="<?= $crop['id'] ?>"><?= $crop['name'] ?></option>
+                                    <option value="<?= $crop['id'] ?>"><?= $crop['crop_name'] ?></option>
                                 <?php
                                 }
                                 ?>
@@ -155,14 +161,14 @@ $barangays = $barangays->all();
                         foreach ($farmers as $farmer) {
                         ?>
                             <tr>
-                                <td><?= $i ?></td>
+                                <td><?= $farmer['id'] ?></td>
                                 <td><?= $farmer['rsbsa_num'] ?></td>
                                 <td>
                                     <?= $farmer['first_name'] ?>
                                     <?= $farmer['middle_name'] ?? '' ?>
                                     <?= $farmer['last_name'] ?>
                                 </td>
-                                <td><?= $farmer['name'] ?></td>
+                                <td><?= $farmer['crop_name'] ?></td>
                                 <td><?= $farmer['area'] ?> sq/m</td>
                                 <td><?= $farmer['barangay_name'] ?></td>
                                 <td><?= $farmer['contact_number'] ?></td>
@@ -175,6 +181,19 @@ $barangays = $barangays->all();
 
                     </tbody>
                 </table>
+            </div>
+            <div style="display:flex; justify-content:flex-end; margin:10px; gap: 5px">
+                <?php
+                $count = 1;
+                while ($count <= $paginate) {
+                ?>
+                    <a href="./farmers.php?page=<?= $count ?>" class="btn-main">
+                        <?= $count ?>
+                    </a>
+                <?php
+                    $count++;
+                }
+                ?>
             </div>
         </div>
 
