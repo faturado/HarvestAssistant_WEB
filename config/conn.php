@@ -1,5 +1,5 @@
 <?php
-    $host = "localhost";
+    $host = "srv1322.hstgr.io";
     $username = "u766798681_dbHarvest";
     $password = "EmmanBayot_69";
     $dbname = "u766798681_adminHarvest";
