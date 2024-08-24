@@ -6,6 +6,11 @@ require_once('../functions.php');
 require_once('../models/Models.php');
 require_once('../models/Farmers.php');
 
+// Enable error logging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if ($_SERVER["REQUEST_METHOD"] != "POST") {
     return json([
         'message' => 'This page cannot be accessed through GET and PUT Request!'
