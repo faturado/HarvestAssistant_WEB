@@ -48,11 +48,12 @@ if (!isset($_POST['datePlanted'])) {
 }
 
 $datePlanted = $_POST['datePlanted'];
+$variance_id = $_POST['varianceID'];
 $date = new DateTime($datePlanted);
 $date = $date->format("Y-m-d");
 
-$stmt = $conn->prepare('INSERT INTO farmer_planted(farmer_id, date_planted, isHarvested) VALUES(?,?,?)');
-$stmt->execute([$farmer_id, $date, 0]);
+$stmt = $conn->prepare('INSERT INTO farmer_planted(farmer_id, variance_id, date_planted, isHarvested) VALUES(?,?,?,?)');
+$stmt->execute([$farmer_id, $variance_id, $date, 0]);
 
 return json([
     "message" => "Planted successfully",

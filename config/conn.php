@@ -6,9 +6,9 @@
     // $dbname = "agri_db";
 
     // Comment Here
-    $host = "mysql";
-    $username = "danny";
-    $password = "dan123";
+    $host = "localhost";
+    $username = "root";
+    $password = "harvestassistant";
     $dbname = "agri_db";
 
     try{

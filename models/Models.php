@@ -9,8 +9,8 @@ class Models
     public function __construct($table)
     {
         $this->table = $table;
-        // $this->pdo = new PDO("mysql:host=localhost;dbname=agri_db", "root", "harvestassistant");
-        $this->pdo = new PDO("mysql:host=mysql;dbname=agri_db", "danny", "dan123");
+        $this->pdo = new PDO("mysql:host=localhost;dbname=agri_db", "root", "harvestassistant");
+        // $this->pdo = new PDO("mysql:host=mysql;dbname=agri_db", "danny", "dan123");
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
