@@ -1,8 +1,8 @@
 <?php
     $host = "localhost";
-    $username = "u766798681_adminHarvest";
-    $password = "EmmanBayot_69";
-    $dbname = "u766798681_dbHarvest";
+    $username = "faturado";
+    $password = "harvestassistant";
+    $dbname = "agri_db";
 
     try{
         $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
